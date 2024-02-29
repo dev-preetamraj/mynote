@@ -40,7 +40,13 @@ const Canvas = ({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
+    if (!canvas) return;
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    context.fillStyle = "hsl(20 14.3% 4.1%)";
+    context.fillRect(0, 0, canvas.width, canvas.height);
     contextRef.current = context;
   }, []);
 
@@ -60,7 +66,7 @@ const Canvas = ({
     if (r) {
       const currX = e.clientX - r.left;
       const currY = e.clientY - r.top;
-      setCursorPos({ x: currX, y: currY });
+      setCursorPos({ x: currX, y: currY + 8 });
 
       if (!drawing) return;
 
@@ -78,14 +84,14 @@ const Canvas = ({
   };
 
   return (
-    <div className="w-full h-full relative cursor-none pr-2 group">
+    <div className="w-full h-full relative cursor-none pr-2 pt-2 group">
       <canvas
         onMouseDown={startDrawing}
         onMouseUp={stopDrawing}
         onMouseMove={draw}
         ref={canvasRef}
-        height={840}
-        width={1400}
+        height={760}
+        width={1220}
         className="border shadow-md shadow-gray-500"
       />
       {cursorPos.x !== -1 && cursorPos.y !== -1 && (

@@ -1,4 +1,4 @@
-import { EraserIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { DownloadIcon, EraserIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
 import { colors } from "@/lib/colors";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,8 @@ type Props = {
   setErasor: (value: boolean) => void;
   setLineColor: (value: string) => void;
   handleEraseAll: () => void;
+  handleExportToPng: () => void;
+  handleExportToPdf: () => void;
 };
 
 const Toolbar = ({
@@ -18,6 +20,8 @@ const Toolbar = ({
   setLineColor,
   lineColor,
   handleEraseAll,
+  handleExportToPng,
+  handleExportToPdf,
 }: Props) => {
   return (
     <div className="min-w-[500px] h-full p-2 border-r flex flex-col space-y-6">
@@ -41,6 +45,7 @@ const Toolbar = ({
           Erase everything
         </Button>
       </div>
+
       <div className="flex flex-col space-y-2">
         <div className="border-b pb-1">Color Palette</div>
         <div className="grid grid-cols-10 gap-4">
@@ -57,6 +62,21 @@ const Toolbar = ({
             />
           ))}
         </div>
+      </div>
+
+      <div className="flex items-center space-x-4">
+        <Button variant="secondary" onClick={handleExportToPdf} disabled>
+          <div className="flex items-center space-x-2">
+            <span>Export to PDF</span>
+            <DownloadIcon className="h-4 w-4" />
+          </div>
+        </Button>
+        <Button variant="secondary" onClick={handleExportToPng}>
+          <div className="flex items-center space-x-2">
+            <span>Export to PNG</span>
+            <DownloadIcon className="h-4 w-4" />
+          </div>
+        </Button>
       </div>
     </div>
   );
