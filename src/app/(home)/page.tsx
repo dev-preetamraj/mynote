@@ -2,15 +2,13 @@
 
 import Canvas from "@/components/Canvas";
 import Toolbar from "@/components/Toolbar";
-import { colors } from "@/lib/colors";
+import { RootState } from "@/features/store";
 import jsPDF from "jspdf";
 import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const HomePage = () => {
-  const [erasor, setErasor] = useState(false);
-  const [lineColor, setLineColor] = useState(
-    colors.find((item) => item.id === 1)?.hex
-  );
+  const toolbarOpen = useSelector((state: RootState) => state.draw.toolbarOpen);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null | undefined>(null);
 
@@ -49,23 +47,15 @@ const HomePage = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-4rem)] flex items-center space-x-2">
-      <Toolbar
-        erasor={erasor}
-        setErasor={setErasor}
-        setLineColor={setLineColor}
-        lineColor={lineColor!}
-        handleEraseAll={handleEraseAll}
-        handleExportToPng={handleExportToPng}
-        handleExportToPdf={handleExportToPdf}
-      />
-      <Canvas
-        canvasRef={canvasRef}
-        contextRef={contextRef}
-        erasor={erasor}
-        lineColor={lineColor!}
-        setLineColor={setLineColor}
-      />
+    <div className="w-full min-w-[40em] h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
+      {toolbarOpen && (
+        <Toolbar
+          handleEraseAll={handleEraseAll}
+          handleExportToPng={handleExportToPng}
+          handleExportToPdf={handleExportToPdf}
+        />
+      )}
+      <Canvas canvasRef={canvasRef} contextRef={contextRef} />
     </div>
   );
 };

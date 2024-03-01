@@ -2,83 +2,103 @@ import { DownloadIcon, EraserIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
 import { colors } from "@/lib/colors";
 import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/features/store";
+import {
+  handleErasorActivity,
+  setLineColor,
+  setLineWidth,
+} from "@/features/draw/drawSlice";
+import { Slider } from "./ui/slider";
 
 type Props = {
-  erasor: boolean;
-  lineColor: string;
-
-  setErasor: (value: boolean) => void;
-  setLineColor: (value: string) => void;
   handleEraseAll: () => void;
   handleExportToPng: () => void;
   handleExportToPdf: () => void;
 };
 
 const Toolbar = ({
-  setErasor,
-  erasor,
-  setLineColor,
-  lineColor,
   handleEraseAll,
   handleExportToPng,
   handleExportToPdf,
 }: Props) => {
+  const dispatch: AppDispatch = useDispatch();
+  const erasorActive = useSelector(
+    (state: RootState) => state.draw.erasorActive
+  );
+  const lineColor = useSelector((state: RootState) => state.draw.lineColor);
+  const lineWidth = useSelector((state: RootState) => state.draw.lineWidth);
   return (
-    <div className="min-w-[500px] h-full p-2 border-r flex flex-col space-y-6">
-      <div className="flex items-center space-x-4">
-        <Button
-          size="icon"
-          variant={erasor ? "outline" : "secondary"}
-          onClick={() => setErasor(false)}
-        >
-          <Pencil1Icon className="h-4 w-4" />
-        </Button>
+    <Card className="max-w-[400px] absolute right-8 top-20 z-10">
+      <CardHeader>
+        <CardTitle>Toolbar</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col space-y-6">
+          <div className="flex items-center space-x-4">
+            <Button
+              size="icon"
+              variant={erasorActive ? "outline" : "secondary"}
+              onClick={() => dispatch(handleErasorActivity(false))}
+            >
+              <Pencil1Icon className="h-4 w-4" />
+            </Button>
 
-        <Button
-          size="icon"
-          variant={erasor ? "secondary" : "outline"}
-          onClick={() => setErasor(true)}
-        >
-          <EraserIcon className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" onClick={handleEraseAll}>
-          Erase everything
-        </Button>
-      </div>
+            <Button
+              size="icon"
+              variant={erasorActive ? "secondary" : "outline"}
+              onClick={() => dispatch(handleErasorActivity(true))}
+            >
+              <EraserIcon className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" onClick={handleEraseAll}>
+              Erase everything
+            </Button>
+          </div>
 
-      <div className="flex flex-col space-y-2">
-        <div className="border-b pb-1">Color Palette</div>
-        <div className="grid grid-cols-10 gap-4">
-          {colors.map((item) => (
-            <div
-              key={item.id}
-              className={cn("w-9 h-9 rounded-sm", {
-                "rounded-full": item.hex === lineColor,
-              })}
-              style={{ background: item.hex }}
-              onClick={() => {
-                if (!erasor) setLineColor(item.hex);
-              }}
-            />
-          ))}
+          <Slider
+            defaultValue={[lineWidth]}
+            max={10}
+            step={1}
+            onValueChange={(value) => dispatch(setLineWidth(value[0]))}
+          />
+
+          <div className="flex flex-col space-y-2">
+            <div className="border-b pb-1">Color Palette</div>
+            <div className="grid grid-cols-5 gap-2">
+              {colors.map((item) => (
+                <div
+                  key={item.id}
+                  className={cn("w-9 h-9 rounded-sm", {
+                    "rounded-full": item.hex === lineColor,
+                  })}
+                  style={{ background: item.hex }}
+                  onClick={() => {
+                    if (!erasorActive) dispatch(setLineColor(item.hex));
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col space-y-4">
+            <Button variant="secondary" onClick={handleExportToPdf} disabled>
+              <div className="flex items-center space-x-2">
+                <span>Export to PDF</span>
+                <DownloadIcon className="h-4 w-4" />
+              </div>
+            </Button>
+            <Button variant="secondary" onClick={handleExportToPng}>
+              <div className="flex items-center space-x-2">
+                <span>Export to PNG</span>
+                <DownloadIcon className="h-4 w-4" />
+              </div>
+            </Button>
+          </div>
         </div>
-      </div>
-
-      <div className="flex items-center space-x-4">
-        <Button variant="secondary" onClick={handleExportToPdf} disabled>
-          <div className="flex items-center space-x-2">
-            <span>Export to PDF</span>
-            <DownloadIcon className="h-4 w-4" />
-          </div>
-        </Button>
-        <Button variant="secondary" onClick={handleExportToPng}>
-          <div className="flex items-center space-x-2">
-            <span>Export to PNG</span>
-            <DownloadIcon className="h-4 w-4" />
-          </div>
-        </Button>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
