@@ -16,12 +16,26 @@ const AppInstruction = () => {
         <NavigationMenuItem>
           <NavigationMenuTrigger>Instruction</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="w-80 z-50">
+            <ul className="w-96 z-50">
               <ListItem title="Browser Refresh">
-                Do not refresh the window else it will erase all the content.
+                Refreshing browser will erase all data but it can be re-stored
+                from Toolbar by clicking on &apos;Restore saved&apos;.
               </ListItem>
               <ListItem title="Viewport Change">
-                Do not change the viewport else it will erase all the content.
+                changing viewport will erase all data but it can be re-stored
+                from Toolbar by clicking on &apos;Restore saved&apos;.
+              </ListItem>
+              <ListItem title="Coming soon for Mobile and Tab">
+                Currently, canvas listens to only mouse events. Touch events
+                will be included soon.
+              </ListItem>
+              <ListItem
+                title="Contribute to this project"
+                href="https://github.com/dev-preetamraj/mynote"
+                target="_blank"
+                className="cursor-pointer"
+              >
+                Click here to visit github repository.
               </ListItem>
             </ul>
           </NavigationMenuContent>

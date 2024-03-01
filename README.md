@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# mynote
 
-## Getting Started
+This is a personal project created for myself as a web alternative for Microsoft OneNote. Although this webapp has limited features but still you can do many things.
 
-First, run the development server:
+## [Live Here](https://mynote-sigma.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. You can draw or take note with wide veriety of colors and brush thickness available.
+2. Note can be exported as png image.
+3. Black paper with dark theme reduces eye strain.
+4. You can restore your drawing or note from local storage (if visited previously)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How to contribute?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Fork [this](https://github.com/dev-preetamraj/mynote) repository.
+2. Clone to your local machine.
+3. Create new branch.
+4. Resolve any issue or add some feature.
+5. Push the changes with proper commit message.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Getting started
 
-## Learn More
+1. ```bash
+   git clone git@github.com:dev-preetamraj/mynote.git
+   ```
+2. ```bash
+   cd mynote
+   ```
+3. ```bash
+   yarn
+   ```
+4. ```bash
+   yarn dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Some Glimpse
+![Demo Image]('https://mynote-sigma.vercel.app/demo.png')

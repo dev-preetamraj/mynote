@@ -10,48 +10,27 @@ const erasorColor = canvasBackground;
 type Props = {
   canvasRef: RefObject<HTMLCanvasElement>;
   contextRef: MutableRefObject<CanvasRenderingContext2D | null | undefined>;
+  saveToHistory: () => void;
 };
 
-const Canvas = ({ canvasRef, contextRef }: Props) => {
+const Canvas = ({ canvasRef, contextRef, saveToHistory }: Props) => {
+  const dispatch: AppDispatch = useDispatch();
   const erasorActive = useSelector(
     (state: RootState) => state.draw.erasorActive
   );
+  const canvasHistory = useSelector(
+    (state: RootState) => state.draw.canvasHistory
+  );
+  const currentStep = useSelector((state: RootState) => state.draw.currentStep);
   const lineColor = useSelector((state: RootState) => state.draw.lineColor);
   const lineWidth = useSelector((state: RootState) => state.draw.lineWidth);
   const erasorWidth = useSelector((state: RootState) => state.draw.erasorWidth);
   const [drawing, setDrawing] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: -1, y: -1 });
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const context = canvas.getContext("2d");
-    if (!context) return;
-
-    canvas.width = window.innerWidth;
-
-    context.fillStyle = canvasBackground;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    contextRef.current = context;
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-
-      context.fillStyle = canvasBackground;
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      contextRef.current = context;
-    });
-  }, []);
-
   const startDrawing = () => {
     contextRef.current?.beginPath();
     setDrawing(true);
-  };
-
-  const stopDrawing = () => {
-    contextRef.current?.closePath();
-    setDrawing(false);
   };
 
   const draw = (e: any) => {
@@ -85,6 +64,56 @@ const Canvas = ({ canvasRef, contextRef }: Props) => {
     context.beginPath();
     context.moveTo(currX, currY);
   };
+
+  const stopDrawing = () => {
+    saveToHistory();
+    contextRef.current?.closePath();
+    setDrawing(false);
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    canvas.width = window.innerWidth;
+
+    context.fillStyle = canvasBackground;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    contextRef.current = context;
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      context.fillStyle = canvasBackground;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      contextRef.current = context;
+    });
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const context = contextRef.current;
+    if (!context) return;
+
+    if (currentStep < 0) {
+      context.fillStyle = canvasBackground;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      contextRef.current = context;
+      return;
+    }
+
+    const img = new Image();
+    img.src = canvasHistory[currentStep];
+    img.onload = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0);
+      contextRef.current = context;
+    };
+  }, [currentStep]);
 
   return (
     <div className="w-full h-full relative cursor-none group">
