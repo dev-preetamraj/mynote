@@ -29,14 +29,14 @@ const Canvas = ({ canvasRef, contextRef }: Props) => {
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    canvas.width = window.innerWidth - 10;
+    canvas.width = window.innerWidth;
 
     context.fillStyle = canvasBackground;
     context.fillRect(0, 0, canvas.width, canvas.height);
     contextRef.current = context;
 
     window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth - 10;
+      canvas.width = window.innerWidth;
 
       context.fillStyle = canvasBackground;
       context.fillRect(0, 0, canvas.width, canvas.height);
@@ -87,7 +87,7 @@ const Canvas = ({ canvasRef, contextRef }: Props) => {
   };
 
   return (
-    <div className="w-full h-full relative cursor-none group bg-red-400">
+    <div className="w-full h-full relative cursor-none group">
       <canvas
         onMouseDown={startDrawing}
         onMouseUp={stopDrawing}

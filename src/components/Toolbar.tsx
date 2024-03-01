@@ -30,7 +30,7 @@ const Toolbar = ({
   const lineColor = useSelector((state: RootState) => state.draw.lineColor);
   const lineWidth = useSelector((state: RootState) => state.draw.lineWidth);
   return (
-    <Card className="max-w-[400px] absolute right-8 top-20 z-10">
+    <Card className="max-w-[400px] absolute right-4 top-4 z-10">
       <CardHeader>
         <CardTitle>Toolbar</CardTitle>
       </CardHeader>

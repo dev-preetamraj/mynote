@@ -6,6 +6,7 @@ import { RootState } from "@/features/store";
 import jsPDF from "jspdf";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const HomePage = () => {
   const toolbarOpen = useSelector((state: RootState) => state.draw.toolbarOpen);
@@ -47,7 +48,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="w-full min-w-[40em] h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
+    <ScrollArea className="w-full min-w-[40em] h-[calc(100vh-4rem)]">
       {toolbarOpen && (
         <Toolbar
           handleEraseAll={handleEraseAll}
@@ -56,7 +57,7 @@ const HomePage = () => {
         />
       )}
       <Canvas canvasRef={canvasRef} contextRef={contextRef} />
-    </div>
+    </ScrollArea>
   );
 };
 
