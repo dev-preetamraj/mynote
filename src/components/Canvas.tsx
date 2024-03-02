@@ -3,17 +3,21 @@
 import { MutableRefObject, RefObject, useEffect, useState } from "react";
 import { AppDispatch, RootState } from "@/features/store";
 import { useDispatch, useSelector } from "react-redux";
-
-const canvasBackground = "hsl(20 14.3% 4.1%)";
-const erasorColor = canvasBackground;
+import { canvasBackground, erasorColor } from "@/lib/colors";
 
 type Props = {
   canvasRef: RefObject<HTMLCanvasElement>;
   contextRef: MutableRefObject<CanvasRenderingContext2D | null | undefined>;
   saveToHistory: () => void;
+  fetchCanvasContentFromLocal: () => void;
 };
 
-const Canvas = ({ canvasRef, contextRef, saveToHistory }: Props) => {
+const Canvas = ({
+  canvasRef,
+  contextRef,
+  saveToHistory,
+  fetchCanvasContentFromLocal,
+}: Props) => {
   const dispatch: AppDispatch = useDispatch();
   const erasorActive = useSelector(
     (state: RootState) => state.draw.erasorActive
@@ -86,9 +90,8 @@ const Canvas = ({ canvasRef, contextRef, saveToHistory }: Props) => {
 
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
-      context.fillStyle = canvasBackground;
-      context.fillRect(0, 0, canvas.width, canvas.height);
       contextRef.current = context;
+      fetchCanvasContentFromLocal();
     });
   }, []);
 
@@ -105,6 +108,8 @@ const Canvas = ({ canvasRef, contextRef, saveToHistory }: Props) => {
       contextRef.current = context;
       return;
     }
+
+    if (canvasHistory.length < 0) return;
 
     const img = new Image();
     img.src = canvasHistory[currentStep];

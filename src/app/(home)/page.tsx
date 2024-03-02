@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { setCanvasHistory, setCurrentStep } from "@/features/draw/drawSlice";
+import { canvasBackground } from "@/lib/colors";
 
 const HomePage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -21,7 +22,11 @@ const HomePage = () => {
   const [localSnapAvailable, setLocalSnapAvailable] = useState(false);
 
   useEffect(() => {
-    if (localStorage.canvasSnapshot) setLocalSnapAvailable(true);
+    if (!localStorage.canvasSnapshot) return;
+
+    setLocalSnapAvailable(true);
+    fetchCanvasContentFromLocal();
+    setLocalSnapAvailable(false);
   }, []);
 
   const takeSnapshotOfCanvas = () => {
@@ -40,9 +45,7 @@ const HomePage = () => {
     dispatch(setCurrentStep(currentStep + 1));
   };
 
-  const handleRestore = () => {
-    if (!localSnapAvailable) return;
-
+  const fetchCanvasContentFromLocal = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -50,15 +53,27 @@ const HomePage = () => {
     if (!context) return;
 
     const imgUrl = localStorage.canvasSnapshot;
+    if (!imgUrl) return;
+
     const img = new Image();
     img.src = imgUrl;
     dispatch(setCanvasHistory([imgUrl]));
     dispatch(setCurrentStep(currentStep + 1));
     img.onload = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = canvasBackground;
+      context.fillRect(0, 0, canvas.width, canvas.height);
       context.drawImage(img, 0, 0);
       contextRef.current = context;
     };
+  };
+
+  const handleRestore = () => {
+    if (!localSnapAvailable) return;
+
+    fetchCanvasContentFromLocal();
+
+    setLocalSnapAvailable(false);
   };
 
   const handleEraseAll = () => {
@@ -149,6 +164,7 @@ const HomePage = () => {
         canvasRef={canvasRef}
         contextRef={contextRef}
         saveToHistory={saveToHistory}
+        fetchCanvasContentFromLocal={fetchCanvasContentFromLocal}
       />
     </ScrollArea>
   );

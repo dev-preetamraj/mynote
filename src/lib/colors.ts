@@ -1,3 +1,5 @@
+export const canvasBackground = "hsl(20 14.3% 4.1%)";
+export const erasorColor = canvasBackground;
 export const colors = [
   {
     id: 1,

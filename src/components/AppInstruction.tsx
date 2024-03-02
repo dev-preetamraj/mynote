@@ -18,12 +18,12 @@ const AppInstruction = () => {
           <NavigationMenuContent>
             <ul className="w-96 z-50">
               <ListItem title="Browser Refresh">
-                Refreshing browser will erase all data but it can be re-stored
-                from Toolbar by clicking on &apos;Restore saved&apos;.
+                Refreshing browser clears the canvas but the last saved history
+                will be restored from local storage.
               </ListItem>
               <ListItem title="Viewport Change">
-                changing viewport will erase all data but it can be re-stored
-                from Toolbar by clicking on &apos;Restore saved&apos;.
+                Changing Viewport clears the canvas but the last saved history
+                will be restored from local storage.
               </ListItem>
               <ListItem title="Coming soon for Mobile and Tab">
                 Currently, canvas listens to only mouse events. Touch events
