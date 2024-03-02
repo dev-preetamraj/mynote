@@ -33,4 +33,4 @@ This is a personal project created for myself as a web alternative for Microsoft
    ```
 
 ## Some Glimpse
-![Demo Image]('https://mynote-sigma.vercel.app/demo.png')
+![Demo Image](https://mynote-sigma.vercel.app/demo.png)
